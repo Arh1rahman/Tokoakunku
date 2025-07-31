@@ -1,0 +1,176 @@
+/* ========== RESET ========== */
+
+{ margin: 0; padding: 0; box-sizing: border-box; }
+
+
+body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #1a1a1a; color: #cccc; line-height: 1.6; scroll-behavior: smooth; }
+
+/* ========== HEADER ========== */ header { background-color: #1444; padding: 20px 0; border-bottom: 2px solid #333; }
+
+header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; color: #111; } 
+
+.logo { font-size: 1.8rem; font-weight: bold; color: #00ffd0; text-align: center; }
+
+nav ul { list-style: none; display: flex; gap: 20px; }
+
+nav a { text-decoration: none; color: #fff; transition: 0.3s; font-weight: 500; }
+
+nav a:hover { color: #00ffd0; }
+
+/* ========== HERO SECTION ========== */ .hero { position: relative; text-align: center; margin-top: 30px; background-color: #111; } 
+
+.hero-image { width: 100%; max-height: 480px; object-fit: cover; border-radius: 10px; filter: brightness(0.8); }
+
+.hero-text { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); text-shadow: 1px 1px 5px #000; width: 90%; color: #ffffff; }
+
+.hero-text h2 { font-size: 2.5rem; margin-bottom: 15px; }
+
+.hero-text p { font-size: 1.2rem; margin-bottom: 25px; }
+
+.btn-primary { background-color: #00ffd0; color: #000; padding: 10px 25px; font-weight: bold; text-decoration: none; border-radius: 8px; transition: 0.3s; display: inline-block; }
+
+.btn-primary:hover { background-color: #00ccaa; }
+
+/* ========== FITUR SECTION ========== */ 
+.fitur { color: #1a1a1a; padding: 60px 20px; text-align: center; }
+
+.fitur h3 { font-size: 2rem; margin-bottom: 40px; color: #00ffd0; }
+
+.fitur-list { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; }
+
+.fitur-box { 
+  background-color: #222; 
+  padding: 30px; 
+  border-radius: 10px;
+  width: 300px;
+  transition: 0.3s;
+  border: 1.5px solid #00ffd0; }
+
+.fitur-box:hover { transform: translateY(-5px); border-color: #00ffd0; }
+
+.fitur-box h4 { font-size: 1.3rem; margin-bottom: 10px; color: #00ffd0; }
+
+.fitur-box p { color: #fff; font-size: 1rem; }
+
+/* ========== PRODUK SECTION ========== */ .produk-section { padding: 60px 20px; background-color: #222; text-align: center; }
+
+.produk-section h2 { font-size: 2rem; margin-bottom: 40px; color: #00ffd0; }
+
+.produk-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; }
+
+.kartu-produk { background-color: #1a1a1a; border: 1px solid #333; width: 260px; border-radius: 10px; overflow: hidden; transition: 0.3s; }
+
+.kartu-produk:hover { border-color: #00ffd0; transform: scale(1.03); }
+
+.kartu-produk img { width: 100%; height: 160px; object-fit: cover; }
+
+.kartu-produk .info { padding: 15px; color: #fff; }
+
+.kartu-produk .info h4 { font-size: 1.1rem; margin-bottom: 5px; color: #fff; }
+
+.kartu-produk .info p { font-size: 0.9rem; margin-bottom: 10px; color: #fff; }
+
+.kartu-produk .harga { font-weight: bold; color: #fff; font-size: 1rem; }
+
+.kartu-produk .btn-beli { display: block; text-align: center; background-color: #00ffd0; color: #000; padding: 10px; text-decoration: none; font-weight: bold; border-radius: 0 0 10px 10px; transition: 0.3s; }
+
+.kartu-produk .btn-beli:hover { background-color: #00ccaa; }
+
+/* ========== LOGIN & REGISTER SECTION ========== */ .login-section { padding: 60px 20px; background-color: #111; color: #f5f5f5; text-align: center; }
+
+.login-section h2 { font-size: 2rem; margin-bottom: 30px; color: #00aaaa; }
+
+.form-login, .form-register { max-width: 400px; margin: auto; background-color: #1a1a1a; padding: 30px; border-radius: 10px; border: 1px solid #333; box-shadow: 0 0 10px rgba(0, 255, 208, 0.1); }
+
+.form-login label, .form-register label { display: block; text-align: left; margin-bottom: 8px; color: #ccc; font-weight: 500; }
+
+.form-login input, .form-register input, .form-register textarea, .form-register select { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #444; border-radius: 8px; background-color: #222; color: #fff; font-size: 1rem; }
+
+.form-login .btn-primary, .form-register .btn-primary { width: 100%; display: inline-block; }
+
+.link-bawah { margin-top: 15px; font-size: 0.9rem; color: #ccc; }
+
+.link-bawah a { color: #00aaaa; text-decoration: none; }
+
+/* ========== FOOTER ========== */ footer { background-color: #0a0a0a; padding: 20px 0; text-align: center; font-size: 0.9rem; color: #fff; border-top: 1px solid #333; }
+
+/* ========== RESPONSIVE ========== */ @media (max-width: 768px) { header .container { flex-direction: column; align-items: flex-start; }
+
+nav ul { flex-direction: column; align-items: flex-start; margin-top: 10px; gap: 10px; }
+
+.hero-text { top: 10%; }
+
+.hero-text h2 { font-size: 1.6rem; }
+
+.fitur-list { flex-direction: column; align-items: center; }
+
+.fitur-box, .form-login, .form-register { width: 90%; }
+
+.kartu-produk { width: 90%; } }
+
+.btn-delete {
+  background-color: #ff5555;
+  color: white;
+  padding: 8px 12px;
+  margin: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.btn-delete:hover {
+  background-color: #ff2222;
+}
+
+select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background-color: #222;
+  color: #fff;
+  font-size: 1rem;
+}
+.checkout-box {
+  background-color: #1a1a1a;
+  padding: 30px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  max-width: 500px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.checkout-box h3 {
+  color: #00ffd0;
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.checkout-box ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 20px;
+}
+
+.checkout-box li {
+  margin-bottom: 8px;
+}
+.kartu-produk button {
+  display: block;
+  margin: 8px auto;
+  padding: 8px 14px;
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.kartu-produk button:hover {
+  background-color: #00ccaa;
+}
