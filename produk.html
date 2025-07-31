@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daftar Akun Game Dijual | TokoAkunku</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1 class="logo">TokoAkunku</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="Jual-akun.html">Jual Akun</a></li>
+          <li><a href="Penawaran.html">Penawaran</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="img/siluet-karakter.png" alt="Siluet Karakter Game" class="hero-image">
+    <div class="hero-text">
+      <h2>Dapatkan Karakter, Hero, dan Skin Terbaikmu!</h2>
+    </div>
+  </section>
+
+  <!-- Daftar Akun Dijual -->
+  <section class="produk-section">
+    <div class="container">
+      <h2>Daftar Akun Game Dijual</h2>
+      <div class="produk-grid" id="produkDijual">
+        <p>Memuat data akun dari database...</p>
+        <a href="#" class="btn-beli" data-id="${id}">Beli</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Daftar Penawaran Pembelian -->
+  <section class="produk-section">
+    <div class="container">
+      <h2>Daftar Penawaran Beli Akun</h2>
+      <div class="produk-grid" id="produkPenawaran">
+        <p>Memuat data penawaran dari database...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 TokoAkunku. Semua hak cipta dilindungi.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase Script -->
+  <script type="module">
+    import { getSemuaAkun } from './js/firebase.js';
+
+    const produkDijual = document.getElementById("jual-akun");
+    const produkPenawaran = document.getElementById("Penawaran");
+
+    getSemuaAkun().then((snapshot) => {
+      produkDijual.innerHTML = "";
+      produkPenawaran.innerHTML = "";
+
+      snapshot.forEach((doc) => {
+        const akun = doc.data();
+
+        const kartu = document.createElement("div");
+        kartu.className = "kartu-produk";
+        kartu.innerHTML = `
+          <img src="${akun.gambar || 'img/default.png'}" alt="${akun.nama}">
+          <div class="info">
+            <h4>${akun.nama}</h4>
+            <p>${akun.deskripsi}</p>
+            <div class="harga">Rp ${akun.harga}</div>
+          </div>
+          <a href="#" class="btn-beli">Lihat Detail</a>
+        `;
+
+        if (akun.tipe === "dijual") {
+          produkDijual.appendChild(kartu);
+        } else if (akun.tipe === "penawaran") {
+          produkPenawaran.appendChild(kartu);
+        }
+      });
+    }).catch((error) => {
+      produkDijual.innerHTML = "<p>Gagal memuat akun.</p>";
+      produkPenawaran.innerHTML = "<p>Gagal memuat penawaran.</p>";
+      console.error(error);
+    });
+    
+    document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("btn-beli")) {
+    e.preventDefault();
+    const id = e.target.getAttribute("data-id");
+    window.location.href = `checkout.html?id=${id}`;
+  }
+});
+  </script>
+</body>
+</html>

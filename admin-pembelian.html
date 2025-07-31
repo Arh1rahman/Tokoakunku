@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Pembelian | TokoAkunku</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1 class="logo">Admin - Pembelian Akun</h1>
+      <nav>
+        <ul>
+          <li><a href="admin.html">Dashboard</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Konten -->
+  <section class="login-section">
+    <div class="container">
+      <h2>Daftar Pembelian</h2>
+      <div id="pembelianList" class="produk-grid"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 TokoAkunku. Panel Admin Pembelian.</p>
+    </div>
+  </footer>
+
+  <!-- Script Admin -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+    import {
+      getFirestore, collection, getDocs, updateDoc, deleteDoc, doc
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAXKSzuh5GDeTqlS1v9cOHFkz6irsA9Sz0",
+      authDomain: "tokoakunku-37524.firebaseapp.com",
+      projectId: "tokoakunku-37524",
+      storageBucket: "tokoakunku-37524.appspot.com",
+      messagingSenderId: "22018759928",
+      appId: "1:22018759928:web:6cb447547b72209982af0d",
+      measurementId: "G-BH2TZB0QDW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const pembelianList = document.getElementById("pembelianList");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user || user.email !== "rapirapi68@gmail.com") {
+        alert("Akses ditolak. Hanya admin yang bisa melihat halaman ini.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      const snapshot = await getDocs(collection(db, "pembelian"));
+      snapshot.forEach((docItem) => {
+        const data = docItem.data();
+        const id = docItem.id;
+
+        const el = document.createElement("div");
+        el.className = "kartu-produk";
+        el.innerHTML = `
+          <div class="info">
+            <h4>${data.nama}</h4>
+            <p><strong>Game:</strong> ${data.game}</p>
+            <p>${data.deskripsi}</p>
+            <p><strong>Harga:</strong> Rp ${data.harga}</p>
+            <p><strong>Status:</strong> ${data.status}</p>
+          </div>
+          <button class="btn-approve" data-id="${id}">Setujui</button>
+          <button class="btn-reject" data-id="${id}">Tolak</button>
+          <button class="btn-delete" data-id="${id}">Hapus</button>
+        `;
+        pembelianList.appendChild(el);
+      });
+    });
+
+    pembelianList.addEventListener("click", async (e) => {
+      const id = e.target.dataset.id;
+      if (!id) return;
+
+      const docRef = doc(db, "pembelian", id);
+
+      if (e.target.classList.contains("btn-approve")) {
+        await updateDoc(docRef, { status: "disetujui" });
+        alert("Pembelian disetujui.");
+        location.reload();
+      }
+
+      if (e.target.classList.contains("btn-reject")) {
+        await updateDoc(docRef, { status: "ditolak" });
+        alert("Pembelian ditolak.");
+        location.reload();
+      }
+
+      if (e.target.classList.contains("btn-delete")) {
+        const konfirmasi = confirm("Yakin ingin menghapus pembelian ini?");
+        if (konfirmasi) {
+          await deleteDoc(docRef);
+          alert("Data dihapus.");
+          location.reload();
+        }
+      }
+    });
+
+    document.getElementById("logout").addEventListener("click", () => {
+      signOut(auth).then(() => window.location.href = "login.html");
+    });
+  </script>
+</body>
+</html>

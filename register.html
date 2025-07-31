@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registrasi | TokoAkunku</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1 class="logo">Daftar Akun Baru</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Register Section -->
+  <section class="login-section">
+    <div class="container">
+      <h2>Daftar Pengguna Baru</h2>
+      <form class="form-register" id="formRegister">
+        <label for="nama">Nama Lengkap</label>
+        <input type="text" id="nama" name="nama" required />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="password">Kata Sandi</label>
+        <input type="password" id="password" name="password" required />
+
+        <button type="submit" class="btn-primary">Daftar</button>
+        <p class="link-bawah">Sudah punya akun? <a href="login.html">Masuk di sini</a></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 TokoAkunku. Semua hak cipta dilindungi.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase Logic -->
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAXKSzuh5GDeTqlS1v9cOHFkz6irsA9Sz0",
+      authDomain: "tokoakunku-37524.firebaseapp.com",
+      projectId: "tokoakunku-37524",
+      storageBucket: "tokoakunku-37524.firebasestorage.app",
+      messagingSenderId: "22018759928",
+      appId: "1:22018759928:web:6cb447547b72209982af0d",
+      measurementId: "G-BH2TZB0QDW"
+    };
+
+    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+    const auth = getAuth(app);
+
+    // Proses registrasi
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("formRegister");
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const nama = document.getElementById("nama").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          await updateProfile(userCredential.user, {
+            displayName: nama
+          });
+          alert("Registrasi berhasil!");
+          window.location.href = "login.html";
+        } catch (error) {
+          alert("Registrasi gagal: " + error.message);
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

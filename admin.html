@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel | TokoAkunku</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1 class="logo">Admin Panel</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="admin-pembelian.html">pembelian</a></li>
+          <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Konten Admin -->
+  <section class="login-section">
+    <div class="container">
+      <div id="notifikasi" style="display:none; background:#ff0; color:#000; padding:10px; margin-bottom:20px; border-radius:5px;">
+  🔔 Data baru masuk! Silakan <button onclick="location.reload()">refresh</button>
+</div>
+      <h2>Data Semua Akun Game</h2>
+      <div id="akunList" class="produk-grid"></div>
+    </div>
+    <div class="btn-group">
+  <button class="btn-approve" data-id="${id}">✔️ Approve</button>
+  <button class="btn-reject" data-id="${id}">❌ Tolak</button>
+</div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 TokoAkunku. Halaman Admin.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase & Kontrol Admin -->
+<script type="module">
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  import { getSemuaAkun, deleteAkunById, isAdmin } from "./js/firebase.js";
+  import { listenToAkun } from "./js/firebase.js";
+
+let akunCount = 0;
+
+listenToAkun((snapshot) => {
+  if (akunCount === 0) {
+    akunCount = snapshot.docs.length; // Simpan jumlah awal
+  } else if (snapshot.docs.length > akunCount) {
+    document.getElementById("notifikasi").style.display = "block";
+  }
+});
+  const auth = getAuth();
+  const akunList = document.getElementById("akunList");
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user || !isAdmin(user.email)) {
+      alert("Akses hanya untuk admin.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    const snapshot = await getSemuaAkun();
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const id = doc.id;
+
+      const kartu = document.createElement("div");
+      kartu.className = "kartu-produk";
+      kartu.innerHTML = `
+  <img src="${data.gambar || 'img/default.jpg'}" alt="Gambar">
+  <div class="info">
+    <h4>${data.nama}</h4>
+    <p>${data.deskripsi}</p>
+    <div class="harga">Rp ${data.harga}</div>
+    <p><strong>Tipe:</strong> ${data.tipe}</p>
+    <p><strong>Status:</strong> ${data.status || "pending"}</p>
+  </div>
+  <div class="btn-group">
+    <button class="btn-approve" data-id="${id}">Setujui</button>
+    <button class="btn-reject" data-id="${id}">Tolak</button>
+    <button class="btn-delete" data-id="${id}">Hapus</button>
+  </div>
+`;
+      akunList.appendChild(kartu);
+    });
+
+    // Tambahkan event listener ke semua tombol hapus
+    akunList.addEventListener("click", async (e) => {
+  const id = e.target.dataset.id;
+
+  // Tombol Setujui
+  if (e.target.classList.contains("btn-approve")) {
+    await updateStatusAkun(id, "disetujui");
+    alert("Akun disetujui.");
+    location.reload();
+  }
+
+  // Tombol Tolak
+  if (e.target.classList.contains("btn-reject")) {
+    await updateStatusAkun(id, "ditolak");
+    alert("Akun ditolak.");
+    location.reload();
+  }
+
+  // Tombol Hapus
+  if (e.target.classList.contains("btn-delete")) {
+    if (confirm("Yakin ingin menghapus akun ini?")) {
+      await deleteAkunById(id);
+      alert("Data berhasil dihapus.");
+      location.reload();
+    }
+  }
+});
+
+  document.getElementById("logout").addEventListener("click", () => {
+    signOut(auth).then(() => window.location.href = "login.html");
+  });
+</script>
+</body>
+</html>

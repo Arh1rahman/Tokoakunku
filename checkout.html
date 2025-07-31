@@ -1,0 +1,100 @@
+<!-- checkout.ht
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | TokoAkunku</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1 class="logo">Checkout</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="Produk.html">Produk</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Checkout Section -->
+  <section class="login-section">
+    <div class="container">
+      <h2>Detail Pembelian Akun</h2>
+      <div class="checkout-box" id="checkoutBox">
+        <p><strong>Produk:</strong> <span id="namaAkun">...</span></p>
+        <p><strong>Game:</strong> <span id="gameAkun">...</span></p>
+        <p><strong>Harga:</strong> <span id="hargaAkun">...</span></p>
+        <p><strong>Deskripsi:</strong> <span id="deskripsiAkun">...</span></p>
+
+        <h3>Pembayaran</h3>
+        <ul>
+          <li>BCA 1229xxxx a.n. <strong>TokoAkunku</strong></li>
+          <li>DANA: 081372703535 a.n. <strong>TokoAkunku</strong></li>
+        </ul>
+
+        <p>Silakan transfer ke salah satu metode di atas. Setelah itu, kirim bukti via WhatsApp:</p>
+        <a href="#" id="whatsappLink" class="btn-primary">kontak kami via WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 TokoAkunku. Semua hak dilindungi.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase & Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAXKSzuh5GDeTqlS1v9cOHFkz6irsA9Sz0",
+      authDomain: "tokoakunku-37524.firebaseapp.com",
+      projectId: "tokoakunku-37524",
+      storageBucket: "tokoakunku-37524.firebasestorage.app",
+      messagingSenderId: "22018759928",
+      appId: "1:22018759928:web:6cb447547b72209982af0d",
+      measurementId: "G-BH2TZB0QDW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Ambil data akun dari localStorage
+    const akunDipilih = JSON.parse(localStorage.getItem("akunDipilih")) || {
+      nama: "Akun MLBB Mythic",
+      game: "Mobile Legends",
+      harga: "250000",
+      deskripsi: "Rank Mythic, Skin Epic, 30 Hero",
+    };
+
+    // Tampilkan di halaman
+    document.getElementById("namaAkun").textContent = akunDipilih.nama;
+    document.getElementById("gameAkun").textContent = akunDipilih.game;
+    document.getElementById("hargaAkun").textContent = `Rp ${akunDipilih.harga}`;
+    document.getElementById("deskripsiAkun").textContent = akunDipilih.deskripsi;
+
+    // Simpan pembelian ke Firestore
+    await addDoc(collection(db, "pembelian"), {
+      ...akunDipilih,
+      status: "menunggu pembayaran",
+      waktu: new Date()
+    });
+
+    // Link WhatsApp
+    const pesan = `Halo admin, saya telah transfer untuk:\n\nProduk: ${akunDipilih.nama}\nGame: ${akunDipilih.game}\nHarga: Rp ${akunDipilih.harga}\n\nBerikut bukti pembayaran saya.`;
+    const waLink = `https://wa.me/6281372703535?text=${encodeURIComponent(pesan)}`;
+    document.getElementById("whatsappLink").setAttribute("href", waLink);
+  </script>
+
+</body>
+</html>

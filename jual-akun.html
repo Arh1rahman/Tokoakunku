@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jual Akun Game | TokoAkunku</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1 class="logo">TokoAkunku</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="jual-akun.html">Jual Akun</a></li>
+          <li><a href="Penawaran.html">Penawaran</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+<script type="module" src="js/firebase.js"></script>
+
+  <!-- Form Jual Akun -->
+  <section class="login-section">
+    <div class="container">
+      <h2>Formulir Jual Akun Game</h2>
+      <form id="formJualAkun" class="form-register">
+        <label for="nama">Nama Akun / Judul Produk</label>
+        <input type="text" id="nama" required>
+
+        <label for="game">Jenis Game</label>
+        <select id="game" required>
+          <option value="">-- Pilih Game --</option>
+          <option value="MLBB">Mobile Legends</option>
+          <option value="Free Fire">Free Fire</option>
+          <option value="PUBG">PUBG</option>
+        </select>
+
+        <label for="deskripsi">Deskripsi Akun</label>
+        <textarea id="deskripsi" rows="4" required></textarea>
+
+        <label for="harga">Harga Jual (Rp)</label>
+        <input type="number" id="harga" required>
+
+        <label for="gambar">Upload Gambar Akun</label>
+        <input type="file" id="gambar" accept="image/*" required>
+
+        <button type="submit" class="btn-primary">Kirim & Tampilkan</button>
+        <p class="link-bawah"><a href="syarat.html">Syarat & Ketentuan Penjual</a></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 TokoAkunku. Semua hak cipta dilindungi.</p>
+    </div>
+  </footer>
+
+  <!-- Simpan ke localStorage -->
+  <script>
+    document.getElementById("formJualAkun").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nama = document.getElementById("nama").value;
+      const game = document.getElementById("game").value;
+      const deskripsi = document.getElementById("deskripsi").value;
+      const harga = document.getElementById("harga").value;
+      const gambarFile = document.getElementById("gambar").files[0];
+
+      const reader = new FileReader();
+      reader.onloadend = function() {
+        const akun = {
+          nama,
+          game,
+          deskripsi,
+          harga,
+          gambar: reader.result,
+          tipe: "dijual"
+        };
+
+        let data = JSON.parse(localStorage.getItem("akunGame")) || [];
+        data.push(akun);
+        localStorage.setItem("akunGame", JSON.stringify(data));
+        alert("Akun berhasil ditambahkan!");
+        window.location.href = "Produk.html";
+      };
+
+      if (gambarFile) {
+        reader.readAsDataURL(gambarFile);
+      } else {
+        alert("Harap upload gambar akun.");
+      }
+    });
+  </script>
+
+</body>
+</html>
