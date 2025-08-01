@@ -2,81 +2,100 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Toko Akun Game | Jual Beli Akun MLBB, Free Fire, PUBG, Roblox</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Toko Akunku | Jual Beli Akun Game</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 </head>
 <body>
-
-  <!-- Header -->
-  <header>
+  <header class="header">
     <div class="container">
-      <h1 class="logo">TokoAkunku</h1>
-      <nav>
-        <ul>
-          <li><a href="index.html">Beranda</a></li>
-          <li><a href="produk.html">dasbort produk</a></li>
-          <li><a href="login.html">Login</a></li>
-        </ul>
+      <h1 class="logo">Toko Akunku</h1>
+      <nav class="nav">
+        <a href="index.html" class="active">Beranda</a>
+        <a href="produk.html">Produk</a>
+        <a href="jual-akun.html">Jual Akun</a>
+        <a href="penawaran.html">Penawaran</a>
+        <a href="login.html" id="loginLink">Login</a>
+        <div id="profilMenu" class="dropdown" style="display: none;">
+          <span id="userEmail" class="user-email"></span>
+          <button id="logoutBtn" class="btn-small">Logout</button>
+        </div>
       </nav>
+
     </div>
   </header>
 
-
-  <!-- Hero Section -->
-  <section class="hero text-center" id="beranda">
-    <img src="siluet-karakter.png" alt="Siluet Karakter Game" class="hero-image" />
-    <div class="hero-text">
-      <h2>Beli & Jual Akun Game</h2>
-      <p>Dapatkan akun sultan MLBB, Free Fire, PUBG, Roblox, dan lainnya dengan aman!</p>
+  <section class="hero">
+    <div class="container">
+      <h2>Akun Game Berkualitas, Harga Bersahabat</h2>
+      <p>Jual beli akun game terpercaya dan aman, semua akun diverifikasi secara ketat.</p>
+      <a href="produk.html" class="btn">Lihat Produk</a>
     </div>
   </section>
 
-  <!-- Kelebihan -->
-  <section class="fitur py-5 bg-light">
-    <div class="container text-center">
-      
-      <h3 class="mb-4">Kenapa Pilih Kami?</h3>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="fitur-box p-3">
-            <h4>Transaksi Aman</h4>
-            <p>Uang ditahan oleh admin hingga akun berhasil diterima pembeli.</p>
-          </div>
+  <section class="features">
+    <div class="container">
+      <h2>Kenapa Pilih Kami?</h2>
+      <div class="features-grid">
+        <div class="feature-item">
+          <h3>100% Aman</h3>
+          <p>Setiap transaksi dipantau dan akun diverifikasi oleh tim kami.</p>
         </div>
-        
-        <div class="col-md-4">
-          <div class="fitur-box p-3">
-            <h4>Beragam Pilihan</h4>
-            <p>Ratusan akun dari berbagai game dan rank tersedia untuk Anda.</p>
-          </div>
+        <div class="feature-item">
+          <h3>Proses Cepat</h3>
+          <p>Penjual dan pembeli langsung terhubung dengan notifikasi real-time.</p>
         </div>
-        
-        <div class="col-md-4">
-          <div class="fitur-box p-3">
-            <h4>Layanan Cepat</h4>
-            <p>Tim kami siap memverifikasi akun dengan cepat dan profesional.</p>
-          </div>
+        <div class="feature-item">
+          <h3>Support 24/7</h3>
+          <p>Tim kami siap membantu Anda kapan saja jika ada kendala.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Testimoni -->
-  <section id="testimoni" class="py-5">
-    <div class="container text-center">
-      <h3 class="mb-4">Testimoni Pembeli</h3>
-      <blockquote>"Saya dapat akun sultan untuk adik saya!" — <strong>@Rini</strong></blockquote>
-      <blockquote>"Awalnya saya ragu, ternyata prosesnya cepat & aman." — <strong>@Doni</strong></blockquote>
-      <blockquote>"Situs terpercaya dan proses mudah!" — <strong>@Septianus</strong></blockquote>
+  <section class="products-preview">
+    <div class="container">
+      <h2>Akun Populer</h2>
+      <div id="produkContainer" class="produk-grid">
+        <!-- Produk akan dimuat lewat Firebase -->
+      </div>
+      <div class="center">
+        <a href="produk.html" class="btn">Lihat Semua</a>
+      </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-dark text-white py-3">
-    <div class="container text-center">
-      <p>&copy; 2025 TokoAkunku. Semua hak cipta dilindungi.</p>
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Toko Akunku. Semua Hak Dilindungi.</p>
     </div>
-  <script src="js/script.js"></script>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script type="module" src="firebase.js"></script>
+  <!-- Script Produk -->
+  <script type="module">
+    import { db, getDocs, collection } from './firebase.js';
+
+    const produkContainer = document.getElementById('produkContainer');
+
+    async function muatProdukPopuler() {
+      const querySnapshot = await getDocs(collection(db, "akunGame"));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "produk-item";
+        div.innerHTML = `
+          <img src="${data.foto}" alt="${data.nama}" />
+          <h3>${data.nama}</h3>
+          <p>Harga: Rp${data.harga.toLocaleString()}</p>
+        `;
+        produkContainer.appendChild(div);
+      });
+    }
+
+    muatProdukPopuler();
+  </script>
 </body>
 </html>
