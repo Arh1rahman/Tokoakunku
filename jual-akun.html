@@ -89,15 +89,18 @@
         const imageUrl = await getDownloadURL(snapshot.ref);
 
         // Simpan data ke Firestore
-        await addDoc(collection(db, "akunGame"), {
-          nama,
-          game,
-          deskripsi,
-          harga,
-          gambar: imageUrl,
-          tipe: "dijual",
-          createdAt: Timestamp.now()
-        });
+        const gambarFile = document.getElementById("gambar").files[0];
+const url = await window.uploadGambar(gambarFile);
+
+await window.saveAkunGame({
+  nama,
+  game,
+  deskripsi,
+  harga,
+  gambar: url,
+  tipe: "dijual",
+  createdAt: Timestamp.now()
+});
 
         alert("Akun berhasil ditambahkan!");
         window.location.href = "Produk.html";
