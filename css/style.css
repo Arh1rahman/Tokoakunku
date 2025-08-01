@@ -174,3 +174,23 @@ select {
 .kartu-produk button:hover {
   background-color: #00ccaa;
 }
+.dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.btn-small {
+  background-color: #444;
+  border: none;
+  padding: 5px 10px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.user-email {
+  font-size: 0.9em;
+  color: #ccc;
+}
+
