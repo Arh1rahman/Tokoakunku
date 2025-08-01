@@ -59,56 +59,50 @@
       <p>&copy; 2025 TokoAkunku. Semua hak cipta dilindungi.</p>
     </div>
   </footer>
+<!-- Firebase SDK -->
+<script type="module">
+  import { Timestamp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { db, storage } from './js/firebase.js';
-    import { collection, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
-    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-storage.js";
+  const form = document.getElementById("formJualAkun");
 
-    const form = document.getElementById("formJualAkun");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const nama = document.getElementById("nama").value;
+    const game = document.getElementById("game").value;
+    const deskripsi = document.getElementById("deskripsi").value;
+    const harga = parseInt(document.getElementById("harga").value);
+    const gambarFile = document.getElementById("gambar").files[0];
 
-      const nama = document.getElementById("nama").value;
-      const game = document.getElementById("game").value;
-      const deskripsi = document.getElementById("deskripsi").value;
-      const harga = parseInt(document.getElementById("harga").value);
-      const gambarFile = document.getElementById("gambar").files[0];
+    if (!gambarFile) {
+      alert("Harap upload gambar akun.");
+      return;
+    }
 
-      if (!gambarFile) {
-        alert("Harap upload gambar akun.");
-        return;
-      }
+    try {
+      // Upload gambar ke Firebase Storage
+      const imageUrl = await window.uploadGambar(gambarFile);
 
-      try {
-        // Upload gambar ke Firebase Storage
-        const storageRef = ref(storage, `akunImages/${Date.now()}_${gambarFile.name}`);
-        const snapshot = await uploadBytes(storageRef, gambarFile);
-        const imageUrl = await getDownloadURL(snapshot.ref);
+      // Simpan ke Firestore
+      await window.saveAkunGame({
+        nama,
+        game,
+        deskripsi,
+        harga,
+        gambar: imageUrl,
+        tipe: "dijual",
+        createdAt: Timestamp.now(),
+        status: "menunggu"
+      });
 
-        // Simpan data ke Firestore
-        const gambarFile = document.getElementById("gambar").files[0];
-const url = await window.uploadGambar(gambarFile);
+      alert("Akun berhasil ditambahkan!");
+      window.location.href = "Produk.html";
 
-await window.saveAkunGame({
-  nama,
-  game,
-  deskripsi,
-  harga,
-  gambar: url,
-  tipe: "dijual",
-  createdAt: Timestamp.now()
-});
-
-        alert("Akun berhasil ditambahkan!");
-        window.location.href = "Produk.html";
-      } catch (error) {
-        console.error("Error saat mengunggah:", error);
-        alert("Gagal menambahkan akun. Silakan coba lagi.");
-      }
-    });
-  </script>
+    } catch (error) {
+      console.error("🔥 Error:", error);
+      alert("Gagal mengirim data. Silakan coba lagi.");
+    }
+  });
+</script>
 </body>
 </html>
